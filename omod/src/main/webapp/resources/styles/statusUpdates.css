@@ -1,0 +1,7 @@
+.status-update {
+    border: 1px black solid;
+    background-color: #add8e6;
+}
+.status-update > .status {
+    font-size: 1.5em;
+}
