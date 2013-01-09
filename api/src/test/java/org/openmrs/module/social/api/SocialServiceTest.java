@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.openmrs.User;
 import org.openmrs.api.UserService;
 import org.openmrs.module.social.SocialStatus;
+import org.openmrs.module.social.api.db.SocialStatusDao;
 import org.openmrs.module.social.api.impl.SocialServiceImpl;
 
 import java.util.Arrays;
@@ -36,13 +37,19 @@ import static org.mockito.Mockito.when;
 public class SocialServiceTest {
 
     private SocialService service;
+    private SocialStatusDao dao;
     private UserService userService;
+    
 
     @Before
     public void setUp() {
         userService = mock(UserService.class);
+        dao = mock(SocialStatusDao.class);
+        
         service = new SocialServiceImpl();
-        ((SocialServiceImpl) service).setUserService(userService);
+        SocialServiceImpl serviceImpl = (SocialServiceImpl) service;
+		serviceImpl.setUserService(userService);
+		serviceImpl.setDao(dao);
     }
 
 	@Test
@@ -55,6 +62,7 @@ public class SocialServiceTest {
         service.postStatusUpdate(status);
 
         verify(userService).saveUser(myself, null);
+        verify(dao).saveSocialStatus(status);
 	}
 
     @Test

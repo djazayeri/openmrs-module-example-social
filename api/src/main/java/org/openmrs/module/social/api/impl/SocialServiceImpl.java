@@ -21,6 +21,7 @@ import org.openmrs.api.UserService;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.social.SocialStatus;
 import org.openmrs.module.social.api.SocialService;
+import org.openmrs.module.social.api.db.SocialStatusDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -38,6 +39,18 @@ public class SocialServiceImpl extends BaseOpenmrsService implements SocialServi
     @Autowired
     @Qualifier("userService")
     private UserService userService;
+    
+    @Autowired
+	private SocialStatusDao dao;
+    
+    /**
+     * Allows to inject a dao for test purposes.
+     * 
+     * @param dao
+     */
+    public void setDao(SocialStatusDao dao) {
+    	this.dao = dao;
+    }
 
     public void setUserService(UserService userService) {
         this.userService = userService;
@@ -48,6 +61,7 @@ public class SocialServiceImpl extends BaseOpenmrsService implements SocialServi
         User user = status.getUser();
         user.setUserProperty(USER_PROPERTY_SOCIAL_STATUS, status.getStatus());
         userService.saveUser(user, null);
+        dao.saveSocialStatus(status);
     }
 
     @Override
