@@ -13,34 +13,91 @@
  */
 package org.openmrs.module.social;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.openmrs.BaseOpenmrsData;
 import org.openmrs.User;
 
-public class SocialStatus {
-
-    private User user;
-    private String status;
-
-    public SocialStatus() {
-    }
-
-    public SocialStatus(User user, String status) {
-        this.user = user;
-        this.status = status;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+@Entity
+@Table(name = "social_social_status")
+public class SocialStatus extends BaseOpenmrsData {
+	
+	@Id
+	@GeneratedValue
+	@Column(name = "social_status_id")
+	private Integer socialStatusId;
+	
+	@ManyToOne
+	@JoinColumn(name = "user")
+	private User user;
+	
+	@Basic
+	@Column(name = "status", length = 255)
+	private String status;
+	
+	public SocialStatus() {
+	}
+	
+	public SocialStatus(User user, String status) {
+		this.user = user;
+		this.status = status;
+	}
+	
+	@Override
+	public Integer getId() {
+		return socialStatusId;
+	}
+	
+	/**
+	 * @see org.openmrs.OpenmrsObject#setId(java.lang.Integer)
+	 */
+	@Override
+	public void setId(Integer id) {
+		this.socialStatusId = id;
+	}
+	
+	public Integer getSocialStatusId() {
+		return socialStatusId;
+	}
+	
+	public void setSocialStatusId(Integer socialStatusId) {
+		this.socialStatusId = socialStatusId;
+	}
+	
+	/**
+	 * @see org.openmrs.BaseOpenmrsObject#getUuid()
+	 */
+	@Basic
+	@Access(AccessType.PROPERTY)
+	@Column(name = "uuid", length = 38, unique = true)
+	@Override
+	public String getUuid() {
+		return super.getUuid();
+	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 }
